@@ -3,8 +3,8 @@ const QuemSomosSchema = require('./../models/quem_somos')
 
 class QuemSomos {
 
-    get(req, res) {
-        QuemSomosSchema.findOne({}, (err, quemSomos) => {
+    getWithParams(req, res) {
+        QuemSomosSchema.find({}, (err, quemSomos) => {
             if (err) {
                 res.status(500).json({ message: 'Houve um erro ao processar sua requisição', error: err })
             } else {

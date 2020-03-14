@@ -12,6 +12,14 @@ const QuemSomosSchema = new Schema({
         type: String,
         required: true,
     },
+    imagem: {
+        type: Array,
+        required: false,
+    },
+    ordenacao: {
+        type: String,
+        required: false,
+    },
     status: {
         type: Boolean,
         trim: true,

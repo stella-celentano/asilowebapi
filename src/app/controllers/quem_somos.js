@@ -4,13 +4,38 @@ const QuemSomosSchema = require('./../models/quem_somos')
 class QuemSomos {
 
     getWithParams(req, res) {
-        QuemSomosSchema.find({}, (err, quemSomos) => {
-            if (err) {
-                res.status(500).json({ message: 'Houve um erro ao processar sua requisição', error: err })
-            } else {
-                res.status(200).json({ message: 'Dados recuperados com sucesso', data: quemSomos })
-            }
-        })
+
+        let limit = parseInt(req.query.limit)
+        let query = {}
+        let page = req.query.page
+        let skip = limit * (page - 1)
+        let { columnSort, valueSort } = req.query
+
+        QuemSomosSchema
+            .find(query)
+            .sort([[columnSort, valueSort]])
+            .skip(skip)
+            .limit(limit)
+            .exec((err, data) => {
+                if (err) {
+                    res.status(500).json({ message: 'Houve um erro ao processar sua requisição', err: err })
+                } else {
+                    QuemSomosSchema
+                        .find(query)
+                        .exec((err) => {
+                            if (err) {
+                                res.status(500).json({ message: 'Houve um erro ao processar sua requisição', err: err })
+                            } else {
+                                res.status(200).json({
+                                    message: 'Dados recuperados com sucesso',
+                                    data: data,
+                                    page: page,
+                                    limit: limit
+                                })
+                            }
+                        })
+                }
+            })
     }
 
     create(req, res) {

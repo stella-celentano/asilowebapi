@@ -22,7 +22,8 @@ class QuemSomos {
                 } else {
                     QuemSomosSchema
                         .find(query)
-                        .exec((err) => {
+                        .exec((err, count) => {
+                            let totalDocuments = count.length
                             if (err) {
                                 res.status(500).json({ message: 'Houve um erro ao processar sua requisição', err: err })
                             } else {
@@ -30,7 +31,8 @@ class QuemSomos {
                                     message: 'Dados recuperados com sucesso',
                                     data: data,
                                     page: page,
-                                    limit: limit
+                                    limit: limit,
+                                    count: totalDocuments,
                                 })
                             }
                         })
